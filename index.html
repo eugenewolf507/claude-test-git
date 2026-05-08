@@ -4,44 +4,234 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Created remotely with Claude</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono&display=swap" rel="stylesheet">
   <style>
+    :root {
+      --bg-0: #0b0d12;
+      --bg-1: #11141b;
+      --surface: rgba(255, 255, 255, 0.04);
+      --surface-strong: rgba(255, 255, 255, 0.08);
+      --border: rgba(255, 255, 255, 0.08);
+      --text: #e6e8ee;
+      --muted: #8b93a7;
+      --accent: #7c5cff;
+      --accent-2: #22d3ee;
+      --accent-soft: rgba(124, 92, 255, 0.18);
+    }
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
     body {
-      font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+      margin: 0;
+      font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+      color: var(--text);
+      background: var(--bg-0);
+      background-image:
+        radial-gradient(1200px 600px at 10% -10%, rgba(124, 92, 255, 0.25), transparent 60%),
+        radial-gradient(900px 500px at 110% 10%, rgba(34, 211, 238, 0.18), transparent 60%),
+        radial-gradient(700px 700px at 50% 120%, rgba(244, 114, 182, 0.14), transparent 60%),
+        linear-gradient(180deg, var(--bg-0), var(--bg-1));
+      min-height: 100vh;
       display: flex;
-      flex-direction: column;
       align-items: center;
       justify-content: center;
-      min-height: 100vh;
-      margin: 0;
-      background: linear-gradient(135deg, #1e1e2e, #313244);
-      color: #cdd6f4;
-      text-align: center;
-      padding: 2rem;
+      padding: 3rem 1.25rem;
+      letter-spacing: -0.01em;
+    }
+    .card {
+      width: min(720px, 100%);
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 2.25rem 2rem 2rem;
+      backdrop-filter: blur(18px) saturate(140%);
+      -webkit-backdrop-filter: blur(18px) saturate(140%);
+      box-shadow:
+        0 1px 0 rgba(255, 255, 255, 0.04) inset,
+        0 30px 60px -20px rgba(0, 0, 0, 0.6);
+    }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: var(--muted);
+      padding: 0.35rem 0.7rem;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      background: var(--surface-strong);
+    }
+    .badge .dot {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: #34d399;
+      box-shadow: 0 0 0 4px rgba(52, 211, 153, 0.18);
     }
     h1 {
-      font-size: 2.5rem;
-      margin-bottom: 1rem;
+      font-size: clamp(1.75rem, 3.2vw, 2.4rem);
+      line-height: 1.1;
+      margin: 1rem 0 0.6rem;
+      font-weight: 700;
+      background: linear-gradient(180deg, #ffffff, #b6bdcc);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
     }
     p {
-      font-size: 1.25rem;
-      max-width: 640px;
-      line-height: 1.6;
+      font-size: 1rem;
+      line-height: 1.65;
+      color: var(--muted);
+      margin: 0;
+      max-width: 60ch;
     }
     code {
-      background: #45475a;
-      padding: 0.15rem 0.4rem;
-      border-radius: 4px;
-      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      font-family: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+      font-size: 0.85em;
+      padding: 0.1rem 0.4rem;
+      border-radius: 6px;
+      background: var(--surface-strong);
+      border: 1px solid var(--border);
+      color: #e6e8ee;
+    }
+
+    .calendar {
+      margin-top: 2rem;
+      padding: 1.25rem;
+      background: var(--surface-strong);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+    }
+    .calendar-header {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      margin-bottom: 1rem;
+    }
+    .calendar-title {
+      font-size: 1.05rem;
+      font-weight: 600;
+    }
+    .calendar-sub {
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+    .calendar-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 4px;
+    }
+    .dow {
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+      text-align: center;
+      padding: 0.4rem 0;
+    }
+    .day {
+      aspect-ratio: 1 / 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: var(--text);
+      border-radius: 10px;
+      transition: background 0.15s ease, transform 0.15s ease;
+    }
+    .day:hover {
+      background: var(--surface);
+    }
+    .day.empty {
+      visibility: hidden;
+    }
+    .day.weekend {
+      color: var(--muted);
+    }
+    .day.today {
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      color: #0b0d12;
+      font-weight: 700;
+      box-shadow:
+        0 0 0 1px rgba(124, 92, 255, 0.5),
+        0 8px 20px -8px rgba(124, 92, 255, 0.6);
+    }
+
+    @media (max-width: 480px) {
+      .card { padding: 1.5rem 1.25rem; border-radius: 16px; }
+      .calendar { padding: 1rem; }
+      .day { font-size: 0.8rem; border-radius: 8px; }
     }
   </style>
 </head>
 <body>
-  <h1>Hello from the <code>dev</code> branch</h1>
-  <p>
-    This file was created remotely with <strong>Claude Code</strong> via the
-    <strong>GitHub MCP</strong> — no local clone, no manual commit. The branch
-    was forked from <code>main</code> and this <code>index.html</code> was
-    committed straight to GitHub through the MCP server.
-  </p>
+  <main class="card">
+    <span class="badge"><span class="dot"></span> dev branch</span>
+    <h1>Hello from Claude Code</h1>
+    <p>
+      This file was created remotely with <strong>Claude Code</strong> via the
+      <strong>GitHub MCP</strong> — no local clone, no manual commit. The branch
+      was forked from <code>main</code> and this <code>index.html</code> was
+      committed straight to GitHub through the MCP server.
+    </p>
+
+    <section class="calendar" aria-label="May 2026 calendar">
+      <header class="calendar-header">
+        <div class="calendar-title">May 2026</div>
+        <div class="calendar-sub">Week starts Monday</div>
+      </header>
+      <div class="calendar-grid" role="grid">
+        <div class="dow">Mon</div>
+        <div class="dow">Tue</div>
+        <div class="dow">Wed</div>
+        <div class="dow">Thu</div>
+        <div class="dow">Fri</div>
+        <div class="dow">Sat</div>
+        <div class="dow">Sun</div>
+
+        <div class="day empty"></div>
+        <div class="day empty"></div>
+        <div class="day empty"></div>
+        <div class="day empty"></div>
+        <div class="day">1</div>
+        <div class="day weekend">2</div>
+        <div class="day weekend">3</div>
+
+        <div class="day">4</div>
+        <div class="day">5</div>
+        <div class="day">6</div>
+        <div class="day">7</div>
+        <div class="day today" aria-current="date">8</div>
+        <div class="day weekend">9</div>
+        <div class="day weekend">10</div>
+
+        <div class="day">11</div>
+        <div class="day">12</div>
+        <div class="day">13</div>
+        <div class="day">14</div>
+        <div class="day">15</div>
+        <div class="day weekend">16</div>
+        <div class="day weekend">17</div>
+
+        <div class="day">18</div>
+        <div class="day">19</div>
+        <div class="day">20</div>
+        <div class="day">21</div>
+        <div class="day">22</div>
+        <div class="day weekend">23</div>
+        <div class="day weekend">24</div>
+
+        <div class="day">25</div>
+        <div class="day">26</div>
+        <div class="day">27</div>
+        <div class="day">28</div>
+        <div class="day">29</div>
+        <div class="day weekend">30</div>
+        <div class="day weekend">31</div>
+      </div>
+    </section>
+  </main>
 </body>
 </html>
